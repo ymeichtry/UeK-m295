@@ -1,0 +1,81 @@
+{
+    "info": {
+        "_postman_id": "2d01c184-e2a3-4b13-9f80-0a828c10bf62",
+        "name": "Bibliothek Tests",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Buch ohne Titel kann nicht erstellt werden",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"author\": \"John Doe\",\n    \"isbn\": \"1234567890\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:3000/api/books",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "books"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Lend kann nicht erfasst werden, wenn das Buch nicht existiert",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bookId\": \"123\",\n    \"borrowerName\": \"Alice\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:3000/api/lend",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "lend"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Dasselbe Buch kann nicht mehrfach gleichzeitig ausgeliehen werden",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"bookId\": \"123\",\n    \"borrowerName\": \"Bob\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:3000/api/lend",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "api",
+                        "lend"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

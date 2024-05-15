@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: Bibliotheks-API
+  description: REST-API für die Verwaltung von Büchern und Ausleihen in einer Bibliothek.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /books:
+    get:
+      summary: Alle Bücher auflisten
+      description: Gibt eine Liste aller Bücher in der Bibliothek zurück.
+      responses:
+        '200':
+          description: Erfolgreiche Anfrage
+      tags:
+        - Bücher
+    post:
+      summary: Neues Buch hinzufügen
+      description: Fügt ein neues Buch zur Bibliothek hinzu.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Buch erfolgreich hinzugefügt
+        '400':
+          description: Ungültige Anfrage
+      tags:
+        - Bücher
+  /books/{bookId}:
+    get:
+      summary: Buchdetails abrufen
+      description: Gibt die Details eines bestimmten Buchs basierend auf der Buch-ID zurück.
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          description: Die ID des Buchs, das abgerufen werden soll.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreiche Anfrage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Buch nicht gefunden
+      tags:
+        - Bücher
+  /books/{bookId}/lend:
+    post:
+      summary: Buch ausleihen
+      description: Leiht ein Buch aus der Bibliothek aus.
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          description: Die ID des Buchs, das ausgeliehen werden soll.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                memberId:
+                  type: string
+                  description: Die ID des Mitglieds, das das Buch ausleiht.
+                dueDate:
+                  type: string
+                  format: date
+                  description: Das Rückgabedatum für das Buch.
+      responses:
+        '200':
+          description: Buch erfolgreich ausgeliehen
+        '400':
+          description: Ungültige Anfrage
+        '404':
+          description: Buch nicht gefunden
+        '409':
+          description: Buch bereits ausgeliehen
+      tags:
+        - Bücher
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Die eindeutige ID des Buchs.
+        title:
+          type: string
+          description: Der Titel des Buchs.
+        author:
+          type: string
+          description: Der Autor des Buchs.
+        genre:
+          type: string
+          description: Das Genre des Buchs.
+        publicationYear:
+          type: integer
+          format: int32
+          description: Das Erscheinungsjahr des Buchs.

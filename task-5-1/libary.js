@@ -59,32 +59,72 @@ const books = [
     }
 ];
 
+let lends=[
+    {
+      "id": "123",
+      "customer_id": "1",
+      "isbn": "978-3-16-148418-8",
+      "borrowed_at": "2024-04-14T08:00:00Z",
+      "returned_at": null
+    }  
+  ];
+
+
+//books
+
 app.get('/books', (request, response) => {
-  response.send(books);
-});
-
-app.get('/books/:isbn', (request, response) => {
-    const book = books.find(book => book.isbn === request.params.isbn);
-    if (book) {
-        response.send(book);
-    } else {
-        response.status(404).send('Book not found');
-    }
-});
-
-app.post('/books', (request, response) => {
-    books = []
-    
-    response.json(newBook);
-});
-
-app.put('/books/:isbn', (request, response) => {
-    books = books.map(
-        (books) => books.isbn === express.request.params.isbn ? express.request.body : book
-    );
-    express.response.send(request.body);
-});
-
+    response.send(books);
+  });
+  
+  app.get('/books/:isbn', (request, response) => {
+    const isbn =request.params.isbn
+    response.send(books.find((book) => book.isbn === isbn));
+  });
+  
+  app.post('/books',(request, response) => {
+    books = [...books, request.body]
+    response.send(request.body)
+  });
+  
+  app.put('/books/:isbn',(request, response) => {
+    books = books.map((book)=> book.isbn === request.params.isbn ? request.body :book);
+    response.send(books)
+  });
+  
+  app.delete('/books/:isbn',(request, response) => {
+    books = books.filter((book)=> book.isbn !== request.params.isbn);
+    response.send(books)
+  });
+  
+  app.patch('/books/:isbn', (request, response) => {
+    const isbn = request.params;
+    const updatedBook = request.body;
+    books = books.map((book) => (book.isbn === isbn ? { ...book, ...updatedBook } : book));
+    response.send(books);
+  });
+  
+  app.get('/lends', (request, response) => {
+    response.send(lends);
+  });
+  
+  app.get('/lends/:id', (request, response) => {
+    response.send(lends.find((lend) => lend.id === request.params.id));
+  });
+  
+  app.post('/lends', (request, response) =>{
+    const completBook = {...request.body, id: uuidv4(), borrowed_at: new Date().toLocaleString('de-CH'), returned_at: null}
+    lends = [...lends, completBook]
+    response.send(completBook)
+  })
+  
+  app.delete('/lends/:id',(request, response) => {
+    const lend = lends.find((lend) => lend.id === request.params.id)
+    const lendReturned = {...lend, returned_at: new Date().toLocaleString('de-CH')}
+    console.log(lendReturned)
+    lends = lends.map((book) => (book.id === request.params.id ? { ...book, ...lendReturned } : book));
+    response.send(lends)
+  });
+  
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

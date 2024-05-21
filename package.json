@@ -4,9 +4,13 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "node": "^20.13.1",
+    "swagger": "^0.7.5",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
     "swagger-autogen": "^2.23.7"
   }
 }

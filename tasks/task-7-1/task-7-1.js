@@ -20,7 +20,7 @@ app.get("/public", (request, response) => {
   response.send("Hello public!");
 });
 
-const basicAuth = (request, response, next) => {
+app.get("/private", (request, response) => {
   const authHeader = request.headers["authorization"];
 
   if (!authHeader) {
@@ -35,13 +35,9 @@ const basicAuth = (request, response, next) => {
   const pass = auth[1];
 
   if (user === USERNAME && pass === PASSWORD) {
-    return next();
+    return response.send("Hello private!");
   } else {
     response.setHeader("WWW-Authenticate", 'Basic realm="401"');
     return response.status(403).send("Forbidden");
   }
-};
-
-app.get("/private", basicAuth, (req, res) => {
-  res.send("Hello private!");
 });
